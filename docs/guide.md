@@ -4,6 +4,10 @@
 
 Token swap aggregation via 1inch across 100+ liquidity sources on 10+ chains. Gets the best price by splitting orders across multiple DEXes (Uniswap, SushiSwap, Curve, Balancer, etc.).
 
+## KYB requirement
+
+The 1inch Swap API requires a registered API key from [portal.1inch.dev](https://portal.1inch.dev). Access is gated behind KYB (Know Your Business) verification. Until KYB is approved, API calls will return 401/403 errors. This action is blocked on KYB completion for production use.
+
 ## Common inputs
 
 | Input     | Description                                                                                                 |
@@ -89,3 +93,13 @@ List supported tokens on a chain (returns up to 50).
 npm test     # mocked tests
 npm run all  # format + lint + test + build
 ```
+
+---
+
+## Future Work
+
+- Complete KYB verification with 1inch to obtain production API key
+- Add integration tests against 1inch API (requires API key)
+- Add support for limit orders via 1inch Limit Order Protocol
+- Add Fusion mode support for gasless swaps
+- Add price impact warnings for large swaps

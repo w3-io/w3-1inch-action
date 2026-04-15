@@ -1,44 +1,158 @@
-# TODO: This file describes your action for the W3 MCP server.
-# AI agents use this to discover your action, understand its commands,
-# and generate correct workflow YAML. Keep it in sync with action.yml.
-#
-# On release, this file is synced to the MCP's registry.yaml.
-
-kind: integration # integration | primitive | utility
-partner: yourpartner # TODO: machine-readable partner ID
-name: YourPartner Integration # TODO: human-readable name
-version: 1.0.0
-repo: w3-io/w3-yourpartner-action # TODO: your repo
+kind: integration
+partner: 1inch
+name: 1inch DEX Aggregation
+version: 0.1.0
+repo: w3-io/w3-dex-action
 
 commands:
-  # TODO: Define each command your action supports. Example:
-  #
-  # - name: inspect
-  #   description: >
-  #     Risk assessment for a blockchain address. Returns per-chain
-  #     scores for fraud, compliance, and cyber risk.
-  #   inputs:
-  #     address:
-  #       type: string
-  #       required: true
-  #       description: Blockchain address to inspect
-  #     chain-id:
-  #       type: string
-  #       required: false
-  #       description: Filter to a specific chain
-  #   outputs:
-  #     result:
-  #       type: object
-  #       description: Full risk score breakdown
-
-  - name: example-command
-    description: TODO - describe what this command does
+  - name: quote
+    description: >
+      Get the best swap price across 100+ DEXes without executing.
+      Returns estimated output amount and gas cost.
     inputs:
-      input:
+      api-key:
         type: string
         required: true
-        description: TODO - describe this input
+        description: 1inch API key from portal.1inch.dev
+      chain:
+        type: string
+        required: true
+        description: 'Target chain: ethereum, base, arbitrum, polygon, optimism, avalanche, bnb, gnosis, zksync'
+      src:
+        type: string
+        required: true
+        description: Source token address (or ETH/native for native token)
+      dst:
+        type: string
+        required: true
+        description: Destination token address
+      amount:
+        type: string
+        required: true
+        description: Amount in base units (wei)
     outputs:
       result:
         type: object
-        description: TODO - describe the output shape
+        description: '{ chain, srcToken, dstToken, srcAmount, dstAmount, estimatedGas }'
+
+  - name: swap
+    description: >
+      Execute a token swap via 1inch aggregation. Auto-approves the
+      source token if the router lacks sufficient allowance. Write
+      operation — requires bridge access to send-transaction.
+    inputs:
+      api-key:
+        type: string
+        required: true
+        description: 1inch API key from portal.1inch.dev
+      chain:
+        type: string
+        required: true
+        description: 'Target chain: ethereum, base, arbitrum, polygon, optimism, avalanche, bnb, gnosis, zksync'
+      src:
+        type: string
+        required: true
+        description: Source token address (or ETH/native for native token)
+      dst:
+        type: string
+        required: true
+        description: Destination token address
+      amount:
+        type: string
+        required: true
+        description: Amount in base units (wei)
+      from:
+        type: string
+        required: true
+        description: Sender wallet address
+      slippage:
+        type: number
+        required: false
+        description: Max slippage percentage (default 1 = 1%)
+      receiver:
+        type: string
+        required: false
+        description: Destination address for output tokens (defaults to from)
+      rpc-url:
+        type: string
+        required: false
+        description: Custom RPC endpoint
+    outputs:
+      result:
+        type: object
+        description: '{ txHash, chain, srcToken, dstToken, srcAmount, dstAmount }'
+
+  - name: approve
+    description: >
+      Approve a token for the 1inch router. Usually not needed since
+      swap auto-approves, but useful for pre-approving unlimited
+      allowance. Write operation.
+    inputs:
+      api-key:
+        type: string
+        required: true
+        description: 1inch API key from portal.1inch.dev
+      chain:
+        type: string
+        required: true
+        description: 'Target chain: ethereum, base, arbitrum, polygon, optimism, avalanche, bnb, gnosis, zksync'
+      token:
+        type: string
+        required: true
+        description: Token address to approve
+      amount:
+        type: string
+        required: false
+        description: Amount to approve (omit for unlimited)
+      rpc-url:
+        type: string
+        required: false
+        description: Custom RPC endpoint
+    outputs:
+      result:
+        type: object
+        description: '{ txHash, chain, token, amount }'
+
+  - name: check-allowance
+    description: >
+      Check if a token is approved for the 1inch router and return
+      the current allowance.
+    inputs:
+      api-key:
+        type: string
+        required: true
+        description: 1inch API key from portal.1inch.dev
+      chain:
+        type: string
+        required: true
+        description: 'Target chain: ethereum, base, arbitrum, polygon, optimism, avalanche, bnb, gnosis, zksync'
+      token:
+        type: string
+        required: true
+        description: Token address to check
+      wallet:
+        type: string
+        required: true
+        description: Wallet address to check allowance for
+    outputs:
+      result:
+        type: object
+        description: '{ chain, token, wallet, allowance }'
+
+  - name: list-tokens
+    description: >
+      List supported tokens on a chain. Returns up to 50 tokens with
+      symbol, name, address, and decimals.
+    inputs:
+      api-key:
+        type: string
+        required: true
+        description: 1inch API key from portal.1inch.dev
+      chain:
+        type: string
+        required: true
+        description: 'Target chain: ethereum, base, arbitrum, polygon, optimism, avalanche, bnb, gnosis, zksync'
+    outputs:
+      result:
+        type: object
+        description: '{ chain, count, tokens: [{ symbol, name, address, decimals }] }'
