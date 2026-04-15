@@ -7,7 +7,7 @@
 #
 # Prerequisites:
 #   - W3 local network running (make dev)
-#   - W3_SECRET_1INCH_API_KEY set to a 1inch API key (from portal.1inch.dev)
+#   - W3_SECRET_ONEINCH_API_KEY set to a 1inch API key (from portal.1inch.dev)
 #   - Note: 1inch API access requires KYB verification on portal.1inch.dev
 
 name: 1inch-e2e
@@ -24,14 +24,14 @@ jobs:
         uses: w3-io/w3-1inch-action@v0
         with:
           command: list-tokens
-          api-key: ${{ secrets.1INCH_API_KEY }}
+          api-key: ${{ secrets.ONEINCH_API_KEY }}
           chain: ethereum
 
       - name: List tokens on Base
         uses: w3-io/w3-1inch-action@v0
         with:
           command: list-tokens
-          api-key: ${{ secrets.1INCH_API_KEY }}
+          api-key: ${{ secrets.ONEINCH_API_KEY }}
           chain: base
 
       # ── Quotes ─────────────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ jobs:
         uses: w3-io/w3-1inch-action@v0
         with:
           command: quote
-          api-key: ${{ secrets.1INCH_API_KEY }}
+          api-key: ${{ secrets.ONEINCH_API_KEY }}
           chain: ethereum
           src: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
           dst: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
@@ -56,7 +56,7 @@ jobs:
         uses: w3-io/w3-1inch-action@v0
         with:
           command: quote
-          api-key: ${{ secrets.1INCH_API_KEY }}
+          api-key: ${{ secrets.ONEINCH_API_KEY }}
           chain: arbitrum
           src: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
           dst: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
@@ -69,7 +69,7 @@ jobs:
         uses: w3-io/w3-1inch-action@v0
         with:
           command: check-allowance
-          api-key: ${{ secrets.1INCH_API_KEY }}
+          api-key: ${{ secrets.ONEINCH_API_KEY }}
           chain: ethereum
           token: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
           wallet: "0x0000000000000000000000000000000000000001"
