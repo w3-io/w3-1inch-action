@@ -1,6 +1,6 @@
 # E2E Test Results
 
-> Last verified: 2026-04-15 -- BLOCKED (KYB required)
+> Last verified: 2026-04-15 -- NOT YET VERIFIED (KYB required at portal.1inch.dev)
 
 ## Prerequisites
 
@@ -13,12 +13,12 @@
 | # | Step | Command | Status | Notes |
 |---|------|---------|--------|-------|
 | 1 | List tokens (Ethereum) | `list-tokens` | BLOCKED | KYB required for API access |
-| 2 | List tokens (Base) | `list-tokens` | BLOCKED | |
-| 3 | Quote ETH to USDC | `quote` | BLOCKED | |
-| 4 | Quote USDC to USDT | `quote` | BLOCKED | |
-| 5 | Check USDC allowance | `check-allowance` | BLOCKED | |
+| 2 | List tokens (Base) | `list-tokens` | BLOCKED | KYB required for API access |
+| 3 | Quote ETH to USDC | `quote` | BLOCKED | KYB required for API access |
+| 4 | Quote USDC to USDT | `quote` | BLOCKED | KYB required for API access |
+| 5 | Check USDC allowance | `check-allowance` | BLOCKED | KYB required for API access |
 
-**Summary: 0/1 -- all commands blocked pending KYB verification
+**Summary: 0/5 -- all commands blocked pending KYB verification
 on portal.1inch.dev.**
 
 ## Skipped Commands
@@ -32,7 +32,7 @@ on portal.1inch.dev.**
 
 ```bash
 # Export credentials (requires KYB-verified account)
-export ONEINCH_API_KEY="..."
+export ONEINCH_API_KEY="your-key-here"
 
 # Run
 w3 workflow test --execute test/workflows/e2e.yaml
